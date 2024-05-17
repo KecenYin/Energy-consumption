@@ -1,0 +1,40 @@
+<resources>
+    <string-array name="house_type_array">
+        <item>Terraced house</item>
+        <item>Detached villa</item>
+        <item>Apartment</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="power_types_array">
+        <item>Mixed power</item>
+        <item>Pure green power</item>
+        <item>Fossil fuel power</item>
+        <item>Solar power</item>
+    </string-array>
+    <string name="app_name">My Application</string>
+    <string name="start">Start</string>
+    <string name="start_button_description">Start the test</string>
+    <string name="question_text">Do you want to have a test for us understand you better?</string>
+    <string name="description">Successfully!</string>
+    <string name="agree">Agree</string>
+    <string name="disagree">Disagree</string>
+    <string name="test">express myself and my opinions harshly, unyieldingly and bluntly.</string>
+    <string name="back_button">Go back</string>
+    <string name="appname">Lovnity</string>
+    <string name="email_number">Phone number/ Email</string>
+    <string name="password_hint">Password</string>
+    <string name="word_hint">Name</string>
+    <string name="Nickname_hint">Username</string>
+    <string name="email_label">Email</string>
+    <string name="confirmpassword_hint">Re-input Password</string>
+    <string name="nextpage">Next</string>
+    <string name="Birthday">Birthday</string>
+    <string name="Code">CODE</string>
+    <string name="code">Inter the code</string>
+    <string name="add_song">Add Song</string>
+    <string name="edit_information">Edit Information</string>
+    <string name="search">Search</string>
+    <string name="delete_song">Delete Song</string>
+
+
+</resources>

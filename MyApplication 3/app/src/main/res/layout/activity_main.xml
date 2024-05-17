@@ -1,0 +1,80 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/etFamilyMembers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter number of family members"
+        android:layout_marginBottom="30dp" />
+
+    <Spinner
+        android:id="@+id/spinnerHouseType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp" />
+
+    <Spinner
+        android:id="@+id/spinnerPowerType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp" />
+
+    <EditText
+        android:id="@+id/etHouseArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:hint="Enter house area (sq meters)"
+        android:layout_marginBottom="30dp" />
+
+    <EditText
+        android:id="@+id/etAdditionalHouseArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:hint="Enter additional house area (sq meters)"
+        android:layout_marginBottom="30dp" />
+
+    <EditText
+        android:id="@+id/etFossilFuelPercentage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:hint="Enter percentage of fossil fuel use"
+        android:visibility="gone"
+        android:layout_marginBottom="30dp" />
+
+    <EditText
+        android:id="@+id/etRenewablePercentage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter percentage of renewable energy"
+        android:inputType="numberDecimal"
+        android:visibility="gone"
+        android:layout_marginBottom="30dp" />
+
+    <Switch
+        android:id="@+id/swElectricHeating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Electric heating"
+        android:layout_marginBottom="30dp" />
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+</LinearLayout>

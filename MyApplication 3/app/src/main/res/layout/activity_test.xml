@@ -1,0 +1,107 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transportation"
+            android:textSize="24sp"
+            android:textColor="#4CAF50"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/textCarDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Car: 0 km"
+            android:layout_marginBottom="10dp" />
+        <SeekBar
+            android:id="@+id/seekBarCar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0"
+            android:thumb="@drawable/custom_thumb" />
+
+        <TextView
+            android:id="@+id/textBicycleDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bicycle: 0 km"
+            android:layout_marginBottom="10dp" />
+        <SeekBar
+            android:id="@+id/seekBarBicycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0"
+            android:thumb="@drawable/custom_thumb" />
+
+        <TextView
+            android:id="@+id/textPublicTransportDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Public Transport: 0 km"
+            android:layout_marginBottom="10dp" />
+        <SeekBar
+            android:id="@+id/seekBarPublicTransport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0"
+            android:thumb="@drawable/custom_thumb" />
+
+        <TextView
+            android:id="@+id/textElectricTransportDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Electric/Intercity: 0 km"
+            android:layout_marginBottom="10dp" />
+        <SeekBar
+            android:id="@+id/seekBarElectricTransport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0"
+            android:thumb="@drawable/custom_thumb" />
+
+        <EditText
+            android:id="@+id/editTextFoodIntake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter total daily food intake (grams)"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/textMeatPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Meat: 0%"
+            android:layout_marginBottom="20dp" />
+
+        <SeekBar
+            android:id="@+id/seekBarMeatPercentage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0"
+            android:thumb="@drawable/custom_thumb"
+            android:layout_marginBottom="30dp" />
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp" />
+    </LinearLayout>
+</ScrollView>

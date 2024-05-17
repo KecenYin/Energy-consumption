@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/button_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="30dp"/> <!-- 设置圆角 -->
+    <solid android:color="#14268C"/> <!-- 设置填充颜色 -->
+    <padding
+        android:left="16dp"
+        android:top="12dp"
+        android:right="16dp"
+        android:bottom="12dp"/> <!-- 设置内边距 -->
+    <size
+        android:width="200dp"
+        android:height="60dp"/> <!-- 设置按钮的默认大小 -->
+</shape>

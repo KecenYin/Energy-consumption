@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="etFamilyMembers" type="id" />
+    <item name="spinnerHouseType" type="id" />
+    <item name="spinnerPowerType" type="id" />
+    <item name="etHouseArea" type="id" />
+    <item name="etAdditionalHouseArea" type="id" />
+    <item name="etFossilFuelPercentage" type="id" />
+    <item name="etRenewablePercentage" type="id" />
+    <item name="swElectricHeating" type="id" />
+    <item name="btnNext" type="id" />
+    <item name="tvResult" type="id" />
+    <item name="tvElectricityResult" type="id" />
+    <item name="tvTotalResult" type="id" />
+    <item name="seekBarMeatPercentage" type="id" />
+    <item name="btnSubmit" type="id" />
+    <item name="textMeatPercentage" type="id" />
+    <item name="seekBarElectricTransport" type="id" />
+    <item name="editTextFoodIntake" type="id" />
+    <item name="textElectricTransportDistance" type="id" />
+    <item name="seekBarPublicTransport" type="id" />
+    <item name="textPublicTransportDistance" type="id" />
+    <item name="seekBarBicycle" type="id" />
+    <item name="textBicycleDistance" type="id" />
+    <item name="seekBarCar" type="id" />
+    <item name="textCarDistance" type="id" />
+</resources>
