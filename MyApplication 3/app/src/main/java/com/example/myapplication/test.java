@@ -29,11 +29,11 @@ public class test extends AppCompatActivity {
         meatPercentageDisplay = findViewById(R.id.textMeatPercentage);
         Button submitButton = findViewById(R.id.btnSubmit);
 
-        carbonEmissionData = (CarbonEmissionData) getIntent().getSerializableExtra("carbonEmissionData");
+        carbonEmissionData = CarbonEmissionDataHolder.getInstance().getCarbonEmissionData();
 
         setupSeekBar(R.id.seekBarCar, carDistanceDisplay, "Car: %d km");
         setupSeekBar(R.id.seekBarBicycle, bicycleDistanceDisplay, "Bicycle: %d km");
-        setupSeekBar(R.id.seekBarPublicTransport, publicTransportDistanceDisplay, "Public Transport: %d km");
+        setupSeekBar(R.id.seekBarPublicTransport, publicTransportDistanceDisplay, "Bus: %d km");
         setupSeekBar(R.id.seekBarElectricTransport, electricTransportDistanceDisplay, "Electric/Intercity: %d km");
 
         SeekBar seekBarMeatPercentage = findViewById(R.id.seekBarMeatPercentage);
@@ -54,18 +54,16 @@ public class test extends AppCompatActivity {
         });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 collectInputData();
                 double foodCarbonEmissions = calculateFoodCarbonEmissions();
                 double carCarbonEmissions = carDistance * 0.097; // Car emissions in kg CO2 per km
-                double publicTransportCarbonEmissions = publicTransportDistance * 0.068; // Public transport emissions in kg CO2 per km
+                double publicTransportCarbonEmissions = publicTransportDistance * 0.068; // Bus emissions in kg CO2 per km
                 double electricCarbonEmissions = electricTransportDistance * 0.001; // Electric transport emissions in kg CO2 per km
 
                 carbonEmissionData = new CarbonEmissionData.Builder()
                         .setFamilyMembers(carbonEmissionData.getFamilyMembers())
                         .setHouseArea(carbonEmissionData.getHouseArea())
-                        .setAdditionalHouseArea(carbonEmissionData.getAdditionalHouseArea())
                         .setElectricityConsumption(carbonEmissionData.getElectricityConsumption())
                         .setGreenElectricityPercentage(carbonEmissionData.getGreenElectricityPercentage())
                         .setCarDistance(carDistance)
@@ -80,8 +78,9 @@ public class test extends AppCompatActivity {
                         .setElectricCarbonEmission(electricCarbonEmissions)
                         .build();
 
+                CarbonEmissionDataHolder.getInstance().setCarbonEmissionData(carbonEmissionData);
+
                 Intent intent = new Intent(test.this, ResultActivity.class);
-                intent.putExtra("carbonEmissionData", carbonEmissionData);
                 startActivity(intent);
             }
         });
@@ -116,7 +115,7 @@ public class test extends AppCompatActivity {
     }
 
     private void collectInputData() {
-        foodIntake = Double.parseDouble(editTextFoodIntake.getText().toString());
+        foodIntake = 30 * Double.parseDouble(editTextFoodIntake.getText().toString());
     }
 
     private double calculateFoodCarbonEmissions() {
@@ -126,6 +125,6 @@ public class test extends AppCompatActivity {
         double meatIntake = foodIntake * (meatPercentage / 100.0);
         double nonMeatIntake = foodIntake - meatIntake;
 
-        return (meatIntake * meatEmission + nonMeatIntake * averageFoodEmission) / 1000; // Convert to kg CO2
+        return (meatIntake * meatEmission + nonMeatIntake * averageFoodEmission) / 1000; // 转换为kg CO2
     }
 }

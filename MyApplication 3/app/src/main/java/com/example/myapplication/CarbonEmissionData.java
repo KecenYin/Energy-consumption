@@ -19,21 +19,19 @@ public class CarbonEmissionData implements Serializable {
     private double electricCarbonEmission;
     private double heatingCarbonEmission;
     private double houseArea;
-    private double additionalHouseArea;
 
     private static final double AVERAGE_ELECTRICITY_EMISSION_FACTOR = 0.281; // kg CO2eq/kWh
     private static final double GREEN_ELECTRICITY_EMISSION_FACTOR = 0.020; // kg CO2eq/kWh
     private static final double HEATING_ENERGY_CONSUMPTION_FACTOR = 241; // kWh/m2 per year
     private static final double HEATING_EMISSION_FACTOR = 0.267; // kg CO2eq/kWh
 
-    public CarbonEmissionData(int familyMembers, double houseArea, double additionalHouseArea, double electricityConsumption,
+    public CarbonEmissionData(int familyMembers, double houseArea, double electricityConsumption,
                               double greenElectricityPercentage, double carDistance, double bicycleDistance,
                               double publicTransportDistance, double electricTransportDistance, double foodIntake,
                               double meatPercentage, double foodCarbonEmission, double carCarbonEmission,
                               double publicTransportCarbonEmission, double electricCarbonEmission) {
         this.familyMembers = familyMembers;
         this.houseArea = houseArea;
-        this.additionalHouseArea = additionalHouseArea;
         this.electricityConsumption = electricityConsumption;
         this.greenElectricityPercentage = greenElectricityPercentage;
         this.carDistance = carDistance;
@@ -107,21 +105,14 @@ public class CarbonEmissionData implements Serializable {
     }
 
     public double getHeatingCarbonEmission() {
-        return heatingCarbonEmission;
+        return heatingCarbonEmission / 12 / familyMembers; // 每月每人均摊
     }
 
     public double getHouseArea() {
         return houseArea;
     }
 
-    public double getAdditionalHouseArea() {
-        return additionalHouseArea;
-    }
-
-    public double getTotalHouseArea() {
-        return houseArea + additionalHouseArea;
-    }
-
+    // 计算电力碳排放
     private double calculateElectricityCarbonEmission() {
         double averageElectricityConsumption = electricityConsumption * ((100 - greenElectricityPercentage) / 100);
         double greenElectricityConsumption = electricityConsumption * (greenElectricityPercentage / 100);
@@ -129,56 +120,56 @@ public class CarbonEmissionData implements Serializable {
                 (greenElectricityConsumption * GREEN_ELECTRICITY_EMISSION_FACTOR);
     }
 
+    // 计算供暖碳排放
     private double calculateHeatingCarbonEmission() {
-        double totalHeatingEnergyConsumption = getTotalHouseArea() * HEATING_ENERGY_CONSUMPTION_FACTOR;
+        double totalHeatingEnergyConsumption = houseArea * HEATING_ENERGY_CONSUMPTION_FACTOR;
         return totalHeatingEnergyConsumption * HEATING_EMISSION_FACTOR;
     }
 
-    public double getPerCapitaElectricityCarbonEmission() {
-        return electricityCarbonEmission / familyMembers;
-    }
-
+    // 获取每月每人电力碳排放
     public double getMonthlyPerCapitaElectricityCarbonEmission() {
-        return getPerCapitaElectricityCarbonEmission() / 12;
+        return electricityCarbonEmission / 12 / familyMembers;
     }
 
-    public double getMonthlyPerCapitaHeatingCarbonEmission() {
-        return heatingCarbonEmission / 12 / familyMembers;
+    // 获取总月度碳排放
+    public double getTotalMonthlyCarbonEmission() {
+        return getMonthlyPerCapitaElectricityCarbonEmission() + getHeatingCarbonEmission() + foodCarbonEmission +
+                carCarbonEmission + publicTransportCarbonEmission + electricCarbonEmission;
     }
 
-    public double getTotalCarbonEmission() {
-        return electricityCarbonEmission + foodCarbonEmission + carCarbonEmission +
-                publicTransportCarbonEmission + electricCarbonEmission + heatingCarbonEmission;
-    }
-
+    // 获取电力排放占比
     public double getElectricityEmissionPercentage() {
-        return (electricityCarbonEmission / getTotalCarbonEmission()) * 100;
+        return (getMonthlyPerCapitaElectricityCarbonEmission() / getTotalMonthlyCarbonEmission()) * 100;
     }
 
+    // 获取汽车排放占比
     public double getCarEmissionPercentage() {
-        return (carCarbonEmission / getTotalCarbonEmission()) * 100;
+        return (carCarbonEmission / getTotalMonthlyCarbonEmission()) * 100;
     }
 
+    // 获取公共交通排放占比
     public double getPublicTransportEmissionPercentage() {
-        return (publicTransportCarbonEmission / getTotalCarbonEmission()) * 100;
+        return (publicTransportCarbonEmission / getTotalMonthlyCarbonEmission()) * 100;
     }
 
+    // 获取食物排放占比
     public double getFoodEmissionPercentage() {
-        return (foodCarbonEmission / getTotalCarbonEmission()) * 100;
+        return (foodCarbonEmission / getTotalMonthlyCarbonEmission()) * 100;
     }
 
+    // 获取电动交通排放占比
     public double getElectricEmissionPercentage() {
-        return (electricCarbonEmission / getTotalCarbonEmission()) * 100;
+        return (electricCarbonEmission / getTotalMonthlyCarbonEmission()) * 100;
     }
 
+    // 获取供暖排放占比
     public double getHeatingEmissionPercentage() {
-        return (heatingCarbonEmission / getTotalCarbonEmission()) * 100;
+        return (getHeatingCarbonEmission() / getTotalMonthlyCarbonEmission()) * 100;
     }
 
     public static class Builder {
         private int familyMembers;
         private double houseArea;
-        private double additionalHouseArea;
         private double electricityConsumption;
         private double greenElectricityPercentage;
         private double carDistance;
@@ -192,83 +183,93 @@ public class CarbonEmissionData implements Serializable {
         private double publicTransportCarbonEmission;
         private double electricCarbonEmission;
 
+        // 设置家庭成员数
         public Builder setFamilyMembers(int familyMembers) {
             this.familyMembers = familyMembers;
             return this;
         }
 
+        // 设置房屋面积
         public Builder setHouseArea(double houseArea) {
             this.houseArea = houseArea;
             return this;
         }
 
-        public Builder setAdditionalHouseArea(double additionalHouseArea) {
-            this.additionalHouseArea = additionalHouseArea;
-            return this;
-        }
-
+        // 设置电力消耗
         public Builder setElectricityConsumption(double electricityConsumption) {
             this.electricityConsumption = electricityConsumption;
             return this;
         }
 
+        // 设置绿色电力百分比
         public Builder setGreenElectricityPercentage(double greenElectricityPercentage) {
             this.greenElectricityPercentage = greenElectricityPercentage;
             return this;
         }
 
+        // 设置汽车距离
         public Builder setCarDistance(double carDistance) {
             this.carDistance = carDistance;
             return this;
         }
 
+        // 设置自行车距离
         public Builder setBicycleDistance(double bicycleDistance) {
             this.bicycleDistance = bicycleDistance;
             return this;
         }
 
+        // 设置公共交通距离
         public Builder setPublicTransportDistance(double publicTransportDistance) {
             this.publicTransportDistance = publicTransportDistance;
             return this;
         }
 
+        // 设置电动交通距离
         public Builder setElectricTransportDistance(double electricTransportDistance) {
             this.electricTransportDistance = electricTransportDistance;
             return this;
         }
 
+        // 设置食物摄入
         public Builder setFoodIntake(double foodIntake) {
             this.foodIntake = foodIntake;
             return this;
         }
 
+        // 设置肉类百分比
         public Builder setMeatPercentage(double meatPercentage) {
             this.meatPercentage = meatPercentage;
             return this;
         }
 
+        // 设置食物碳排放
         public Builder setFoodCarbonEmission(double foodCarbonEmission) {
             this.foodCarbonEmission = foodCarbonEmission;
             return this;
         }
 
+        // 设置汽车碳排放
         public Builder setCarCarbonEmission(double carCarbonEmission) {
             this.carCarbonEmission = carCarbonEmission;
             return this;
         }
 
+        // 设置公共交通碳排放
         public Builder setPublicTransportCarbonEmission(double publicTransportCarbonEmission) {
             this.publicTransportCarbonEmission = publicTransportCarbonEmission;
             return this;
         }
 
+        // 设置电动交通碳排放
         public Builder setElectricCarbonEmission(double electricCarbonEmission) {
             this.electricCarbonEmission = electricCarbonEmission;
             return this;
         }
 
+        // 构建CarbonEmissionData对象
         public CarbonEmissionData build() {
-            return new CarbonEmissionData(familyMembers, houseArea, additionalHouseArea, electricityConsumption,
+            return new CarbonEmissionData(familyMembers, houseArea, electricityConsumption,
                     greenElectricityPercentage, carDistance, bicycleDistance, publicTransportDistance,
                     electricTransportDistance, foodIntake, meatPercentage, foodCarbonEmission, carCarbonEmission,
                     publicTransportCarbonEmission, electricCarbonEmission);

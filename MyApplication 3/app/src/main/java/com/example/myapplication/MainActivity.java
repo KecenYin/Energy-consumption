@@ -13,25 +13,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText etFamilyMembers, etHouseArea, etAdditionalHouseArea, etFossilFuelPercentage, etRenewablePercentage;
+    private EditText etFamilyMembers, etHouseArea, etFossilFuelPercentage, etRenewablePercentage;
     private Spinner spinnerHouseType, spinnerPowerType;
     private Switch swElectricHeating;
     private String houseType, powerType;
     private int familyMembers;
-    private double houseArea, additionalHouseArea, fossilFuelPercentage, renewablePercentage, greenElectricityPercentage;
+    private double houseArea, fossilFuelPercentage, renewablePercentage, greenElectricityPercentage;
     private boolean electricHeating;
-    private double carDistance, bicycleDistance, publicTransportDistance, electricTransportDistance;
-    private CarbonEmissionData carbonEmissionData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize UI components
+        // 初始化UI组件
         etFamilyMembers = findViewById(R.id.etFamilyMembers);
         etHouseArea = findViewById(R.id.etHouseArea);
-        etAdditionalHouseArea = findViewById(R.id.etAdditionalHouseArea);
         etFossilFuelPercentage = findViewById(R.id.etFossilFuelPercentage);
         etRenewablePercentage = findViewById(R.id.etRenewablePercentage);
         spinnerHouseType = findViewById(R.id.spinnerHouseType);
@@ -39,19 +36,19 @@ public class MainActivity extends AppCompatActivity {
         swElectricHeating = findViewById(R.id.swElectricHeating);
         Button nextButton = findViewById(R.id.btnNext);
 
-        // Set up house type spinner
+        // 设置房屋类型下拉框
         ArrayAdapter<CharSequence> adapterHouseType = ArrayAdapter.createFromResource(this,
                 R.array.house_type_array, android.R.layout.simple_spinner_item);
         adapterHouseType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHouseType.setAdapter(adapterHouseType);
 
-        // Set up power type spinner
+        // 设置电力类型下拉框
         ArrayAdapter<CharSequence> adapterPowerType = ArrayAdapter.createFromResource(this,
                 R.array.power_types_array, android.R.layout.simple_spinner_item);
         adapterPowerType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPowerType.setAdapter(adapterPowerType);
 
-        // Set visibility for percentage fields based on power type selection
+        // 根据电力类型选择设置可见性
         spinnerPowerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -78,49 +75,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Set visibility for heating consumption based on electric heating switch
-        swElectricHeating.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                etAdditionalHouseArea.setVisibility(View.GONE);
-            } else {
-                etAdditionalHouseArea.setVisibility(View.VISIBLE);
-            }
-        });
-
-        // Set up next button click listener
+        // 设置下一步按钮点击事件
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 collectInputData();
-                carbonEmissionData = new CarbonEmissionData.Builder()
+                double electricityConsumption = calculateElectricityConsumption();
+                CarbonEmissionData carbonEmissionData = new CarbonEmissionData.Builder()
                         .setFamilyMembers(familyMembers)
                         .setHouseArea(houseArea)
-                        .setAdditionalHouseArea(additionalHouseArea)
-                        .setElectricityConsumption(calculateElectricityConsumption())
+                        .setElectricityConsumption(electricityConsumption)
                         .setGreenElectricityPercentage(greenElectricityPercentage)
-                        .setCarDistance(carDistance)
-                        .setBicycleDistance(bicycleDistance)
-                        .setPublicTransportDistance(publicTransportDistance)
-                        .setElectricTransportDistance(electricTransportDistance)
-                        .setFoodIntake(0) // Example value, replace with actual data
-                        .setMeatPercentage(0) // Example value, replace with actual data
-                        .setFoodCarbonEmission(0) // Example value, replace with actual data
-                        .setCarCarbonEmission(0) // Example value, replace with actual data
-                        .setPublicTransportCarbonEmission(0) // Example value, replace with actual data
-                        .setElectricCarbonEmission(0) // Example value, replace with actual data
                         .build();
-                Intent intent = new Intent(MainActivity.this,test.class);
-                intent.putExtra("carbonEmissionData", carbonEmissionData);
+
+                CarbonEmissionDataHolder.getInstance().setCarbonEmissionData(carbonEmissionData);
+
+                Intent intent = new Intent(MainActivity.this, test.class);
                 startActivity(intent);
             }
         });
     }
 
+    // 收集输入数据
     private void collectInputData() {
-        // Collect data from UI components
         familyMembers = Integer.parseInt(etFamilyMembers.getText().toString());
         houseArea = Double.parseDouble(etHouseArea.getText().toString());
-        additionalHouseArea = Double.parseDouble(etAdditionalHouseArea.getText().toString());
         if (powerType.equals("Mixed power")) {
             fossilFuelPercentage = Double.parseDouble(etFossilFuelPercentage.getText().toString());
             renewablePercentage = Double.parseDouble(etRenewablePercentage.getText().toString());
@@ -138,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
         houseType = spinnerHouseType.getSelectedItem().toString();
     }
 
+    // 计算电力消耗
     private double calculateElectricityConsumption() {
-        // Calculate electricity consumption based on house type and family size
         int X = familyMembers - 1;
         double electricityConsumption = 0;
         switch (houseType) {
@@ -154,19 +133,5 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return electricityConsumption;
-    }
-
-    private double calculateHeatingEnergyConsumption() {
-        double totalHouseArea = houseArea + additionalHouseArea;
-        return totalHouseArea * 241; // kWh/m2 per year
-    }
-
-    private double calculateHeatingCarbonEmissions() {
-        if (electricHeating) {
-            return 0; // No carbon emissions for electric heating
-        } else {
-            double heatingEnergyConsumption = calculateHeatingEnergyConsumption();
-            return heatingEnergyConsumption * 0.267; // kg CO2eq/kWh for district heating
-        }
     }
 }

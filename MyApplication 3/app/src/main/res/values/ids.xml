@@ -24,4 +24,11 @@
     <item name="textBicycleDistance" type="id" />
     <item name="seekBarCar" type="id" />
     <item name="textCarDistance" type="id" />
+    <item name="btnViewAnalysis" type="id" />
+    <item name="btnCompare" type="id" />
+    <item name="tvHeatingEmissionPercentage" type="id" />
+    <item name="tvElectricityEmissionPercentage" type="id" />
+    <item name="tvFoodEmissionPercentage" type="id" />
+    <item name="tvElectricEmissionPercentage" type="id" />
+    <item name="tvPublicTransportEmissionPercentage" type="id" />
 </resources>
