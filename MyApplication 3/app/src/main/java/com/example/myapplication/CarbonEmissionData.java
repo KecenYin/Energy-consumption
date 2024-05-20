@@ -105,7 +105,7 @@ public class CarbonEmissionData implements Serializable {
     }
 
     public double getHeatingCarbonEmission() {
-        return heatingCarbonEmission / 12 / familyMembers; // 每月每人均摊
+        return heatingCarbonEmission;
     }
 
     public double getHouseArea() {
@@ -120,10 +120,10 @@ public class CarbonEmissionData implements Serializable {
                 (greenElectricityConsumption * GREEN_ELECTRICITY_EMISSION_FACTOR);
     }
 
-    // 计算供暖碳排放
+    // 计算供暖碳排放，并按每人均摊
     private double calculateHeatingCarbonEmission() {
         double totalHeatingEnergyConsumption = houseArea * HEATING_ENERGY_CONSUMPTION_FACTOR;
-        return totalHeatingEnergyConsumption * HEATING_EMISSION_FACTOR;
+        return totalHeatingEnergyConsumption * HEATING_EMISSION_FACTOR / familyMembers; // 按每人计算
     }
 
     // 获取每月每人电力碳排放
@@ -131,9 +131,14 @@ public class CarbonEmissionData implements Serializable {
         return electricityCarbonEmission / 12 / familyMembers;
     }
 
+    // 获取每月每人供暖碳排放
+    public double getMonthlyPerCapitaHeatingCarbonEmission() {
+        return heatingCarbonEmission / 12 / familyMembers;
+    }
+
     // 获取总月度碳排放
     public double getTotalMonthlyCarbonEmission() {
-        return getMonthlyPerCapitaElectricityCarbonEmission() + getHeatingCarbonEmission() + foodCarbonEmission +
+        return getMonthlyPerCapitaElectricityCarbonEmission() + getMonthlyPerCapitaHeatingCarbonEmission() + foodCarbonEmission +
                 carCarbonEmission + publicTransportCarbonEmission + electricCarbonEmission;
     }
 
@@ -164,7 +169,7 @@ public class CarbonEmissionData implements Serializable {
 
     // 获取供暖排放占比
     public double getHeatingEmissionPercentage() {
-        return (getHeatingCarbonEmission() / getTotalMonthlyCarbonEmission()) * 100;
+        return (getMonthlyPerCapitaHeatingCarbonEmission() / getTotalMonthlyCarbonEmission()) * 100;
     }
 
     public static class Builder {

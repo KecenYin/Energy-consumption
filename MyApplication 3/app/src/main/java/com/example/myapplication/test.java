@@ -33,7 +33,7 @@ public class test extends AppCompatActivity {
 
         setupSeekBar(R.id.seekBarCar, carDistanceDisplay, "Car: %d km");
         setupSeekBar(R.id.seekBarBicycle, bicycleDistanceDisplay, "Bicycle: %d km");
-        setupSeekBar(R.id.seekBarPublicTransport, publicTransportDistanceDisplay, "Bus: %d km");
+        setupSeekBar(R.id.seekBarPublicTransport, publicTransportDistanceDisplay, "Public Transport: %d km");
         setupSeekBar(R.id.seekBarElectricTransport, electricTransportDistanceDisplay, "Electric/Intercity: %d km");
 
         SeekBar seekBarMeatPercentage = findViewById(R.id.seekBarMeatPercentage);
@@ -54,11 +54,12 @@ public class test extends AppCompatActivity {
         });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 collectInputData();
                 double foodCarbonEmissions = calculateFoodCarbonEmissions();
                 double carCarbonEmissions = carDistance * 0.097; // Car emissions in kg CO2 per km
-                double publicTransportCarbonEmissions = publicTransportDistance * 0.068; // Bus emissions in kg CO2 per km
+                double publicTransportCarbonEmissions = publicTransportDistance * 0.068; // Public transport emissions in kg CO2 per km
                 double electricCarbonEmissions = electricTransportDistance * 0.001; // Electric transport emissions in kg CO2 per km
 
                 carbonEmissionData = new CarbonEmissionData.Builder()

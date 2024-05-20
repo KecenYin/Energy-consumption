@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class ResultActivity extends AppCompatActivity {
         if (carbonEmissionData != null) {
             double monthlyElectricityEmission = carbonEmissionData.getMonthlyPerCapitaElectricityCarbonEmission();
             double foodCarbonEmission = carbonEmissionData.getFoodCarbonEmission();
-            double heatingCarbonEmission = carbonEmissionData.getHeatingCarbonEmission();
+            double heatingCarbonEmission = carbonEmissionData.getMonthlyPerCapitaHeatingCarbonEmission();
             double totalEmission = carbonEmissionData.getTotalMonthlyCarbonEmission();
             double carEmissionPercentage = carbonEmissionData.getCarEmissionPercentage();
             double busEmissionPercentage = carbonEmissionData.getPublicTransportEmissionPercentage();
@@ -96,7 +98,7 @@ public class ResultActivity extends AppCompatActivity {
         double foodEmission = carbonEmissionData.getFoodCarbonEmission();
         double transportEmission = carbonEmissionData.getCarCarbonEmission() + carbonEmissionData.getPublicTransportCarbonEmission() + carbonEmissionData.getElectricCarbonEmission();
         double electricityEmission = carbonEmissionData.getMonthlyPerCapitaElectricityCarbonEmission();
-        double heatingEmission = carbonEmissionData.getHeatingCarbonEmission();
+        double heatingEmission = carbonEmissionData.getMonthlyPerCapitaHeatingCarbonEmission();
 
         ArrayList<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry((float) (foodEmission / totalEmission * 100), "Food"));
@@ -108,8 +110,25 @@ public class ResultActivity extends AppCompatActivity {
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
 
         PieData data = new PieData(dataSet);
+        data.setValueFormatter(new PercentFormatter());
+        data.setValueTextSize(12f); // 设置百分比字体大小
+
         pieChart.setData(data);
         pieChart.invalidate(); // refresh
+
+        // 调整图例字体大小
+        pieChart.getLegend().setTextSize(14f);
+
+        // 添加每个部分的CO2排放量
+        StringBuilder descriptionBuilder = new StringBuilder();
+        descriptionBuilder.append("Food: ").append(foodEmission).append(" kg CO2\n");
+        descriptionBuilder.append("Transport: ").append(transportEmission).append(" kg CO2\n");
+        descriptionBuilder.append("Electricity: ").append(electricityEmission).append(" kg CO2\n");
+        descriptionBuilder.append("Heating: ").append(heatingEmission).append(" kg CO2\n");
+
+        TextView descriptionLabel = dialogView.findViewById(R.id.descriptionLabel);
+        descriptionLabel.setText(descriptionBuilder.toString());
+        descriptionLabel.setTextSize(16f); // 设置描述字体大小
 
         builder.setPositiveButton("OK", null);
         builder.show();
